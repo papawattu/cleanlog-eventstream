@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.licenses=MIT
 ARG USER=nouser
 ARG PORT=3000
 
-RUN apk add --no-cache make
+RUN apk add --no-cache make && apk add --no-cache sudo && apk add --no-cache librdkafka-dev
 
 WORKDIR /app
 
