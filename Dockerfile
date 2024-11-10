@@ -1,12 +1,14 @@
 # Use a multi-stage build to support multiple architectures
 # Stage 1: Build stage
-FROM golang:1.23.1 AS builder
+FROM golang:1.23.1-alpine AS builder
 LABEL org.opencontainers.image.source=https://github.com/papawattu/cleanlog-eventstream
 LABEL org.opencontainers.image.description="A simple web app log cleaning house"
 LABEL org.opencontainers.image.licenses=MIT
 
 ARG USER=nouser
 ARG PORT=3000
+
+RUN apk add --no-cache make
 
 WORKDIR /app
 
