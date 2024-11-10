@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -26,15 +25,26 @@ func generateRandomString(n int) string {
 
 func main() {
 
-	port := flag.String("port", "8090", "port to listen on")
-	groupName := flag.String("group", "foo", "kafka consumer group name")
-	bootstrapServers := flag.String("bootstrap-servers", "localhost:29092,localhost:39092,localhost:49092", "kafka bootstrap servers")
-	flag.Parse()
+	port := os.Getenv("PORT")
+	groupName := os.Getenv("GROUP_NAME")
+	bootstrapServers := os.Getenv("BOOTSTRAP_SERVERS")
 
-	log.Printf("Listening on port %s", fmt.Sprintf(":%s", *port))
+	if port == "" {
+		port = "3000"
+	}
+	if groupName == "" {
+		groupName = "default"
+	}
+	if bootstrapServers == "" {
+		bootstrapServers = "localhost:29092,localhost:39092,localhost:49092"
+	} else {
+		bootstrapServers = os.Getenv("BOOTSTRAP_SERVERS")
+	}
+
+	log.Printf("Listening on port %s", fmt.Sprintf(":%s", port))
 
 	server := &http.Server{
-		Addr: fmt.Sprintf(":%s", *port),
+		Addr: fmt.Sprintf(":%s", port),
 	}
 
 	sigChan := make(chan os.Signal, 1)
@@ -65,7 +75,7 @@ func main() {
 		}
 
 		consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-			"bootstrap.servers":             *bootstrapServers,
+			"bootstrap.servers":             bootstrapServers,
 			"group.id":                      group,
 			"auto.offset.reset":             offset,
 			"enable.auto.commit":            "false",
@@ -155,7 +165,7 @@ func main() {
 			log.Fatalf("HTTP close error: %v", err)
 		}
 	}()
-	log.Printf("Group name %s", *groupName)
+	log.Printf("Group name %s", groupName)
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
