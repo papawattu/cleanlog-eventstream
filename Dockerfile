@@ -23,6 +23,9 @@ RUN make build
 
 # Stage 2: Final stage
 FROM debian AS build-stage
+LABEL org.opencontainers.image.source=https://github.com/papawattu/cleanlog-eventstream
+LABEL org.opencontainers.image.description="A simple web app log cleaning house"
+LABEL org.opencontainers.image.licenses=MIT
 
 ARG USER=nouser
 
