@@ -16,7 +16,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o bin/eventstream ./
+RUN make build
 
 
 # Stage 2: Final stage
@@ -35,8 +35,6 @@ RUN adduser -D $USER \
 
 USER $USER
 
-ENV PORT=$PORT
-
-EXPOSE $PORT
+EXPOSE 3000
 
 ENTRYPOINT ["/eventstream"]
