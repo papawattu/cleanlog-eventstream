@@ -136,7 +136,7 @@ func main() {
 					//log.Printf("Id: %s\n", e.TopicPartition.Offset)
 					fmt.Fprintf(w, "event: message\n")
 					fmt.Fprintf(w, "data: %s\n", string(e.Value))
-					fmt.Fprintf(w, "id: %s\n", e.TopicPartition.Offset)
+					fmt.Fprintf(w, "id: %s\n\n", e.TopicPartition.Offset)
 					consumer.Commit()
 					w.(http.Flusher).Flush()
 				case kafka.Error:
